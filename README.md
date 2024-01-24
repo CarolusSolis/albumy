@@ -12,22 +12,18 @@ Demo: http://albumy.helloflask.com
 
 clone:
 ```
-$ git clone https://github.com/greyli/albumy.git
+$ git clone https://github.com/CarolusSolis/albumy.git
 $ cd albumy
 ```
 create & activate virtual env then install dependency:
 
-with venv/virtualenv + pip:
+with conda: 
 ```
-$ python -m venv env  # use `virtualenv env` for Python2, use `python3 ...` for Python3 on Linux & macOS
-$ source env/bin/activate  # use `env\Scripts\activate` on Windows
+$ conda create -n albumy python=3.8
+$ conda activate albumy
 $ pip install -r requirements.txt
 ```
-or with Pipenv:
-```
-$ pipenv install --dev
-$ pipenv shell
-```
+
 generate fake data then run:
 ```
 $ flask forge
