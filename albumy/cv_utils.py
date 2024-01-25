@@ -47,5 +47,5 @@ def get_caption_local(image_path, verbose=False):
     return caption
 
 
-if __name__ == "__main__":
+if __name__ == "__main__":  # this is for testing purposes
     get_caption_local(sys.argv[1], True)
