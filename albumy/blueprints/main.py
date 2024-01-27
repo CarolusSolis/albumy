@@ -18,7 +18,7 @@ from albumy.forms.main import DescriptionForm, TagForm, CommentForm
 from albumy.models import User, Photo, Tag, Follow, Collect, Comment, Notification
 from albumy.notifications import push_comment_notification, push_collect_notification
 from albumy.utils import rename_image, resize_image, redirect_back, flash_errors
-from albumy.cv_utils import get_caption_local
+from albumy.cv_utils import get_caption_local, get_tags_local
 
 main_bp = Blueprint('main', __name__)
 
@@ -128,13 +128,28 @@ def upload():
         filename_m = resize_image(f, filename, current_app.config['ALBUMY_PHOTO_SIZE']['medium'])
         # use get_caption_local to get caption
         caption = get_caption_local(os.path.join(current_app.config['ALBUMY_UPLOAD_PATH'], filename))
+        # get the list of tag names
+        tag_names = [tag.name for tag in get_tags_local(os.path.join(current_app.config['ALBUMY_UPLOAD_PATH'], filename))]
+
+        # create or get Tag objects for each tag name
+        tag_objects = []
+        for name in tag_names:
+            tag = Tag.query.filter_by(name=name).first()
+            if tag is None:
+                tag = Tag(name=name)
+                db.session.add(tag)
+            tag_objects.append(tag)
+
+        # create the Photo with the list of Tag objects
         photo = Photo(
             filename=filename,
             filename_s=filename_s,
             filename_m=filename_m,
             author=current_user._get_current_object(),
-            description=caption
+            description=caption,
+            tags=tag_objects  # use the list of Tag objects here
         )
+
         db.session.add(photo)
         db.session.commit()
     return render_template('main/upload.html')
