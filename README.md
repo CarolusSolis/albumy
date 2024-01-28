@@ -24,6 +24,14 @@ $ conda activate albumy
 $ pip install -r requirements.txt
 ```
 
+Create a Azure vision key, link: https://azure.microsoft.com/en-us/services/cognitive-services/computer-vision/
+
+Create a file called `.env` in the root directory of the project and add the following configuration:
+```
+VISION_KEY=<your Azure vision key>
+VISION_ENDPOINT=<your Azure vision endpoint>
+```
+
 generate fake data then run:
 ```
 $ flask forge
